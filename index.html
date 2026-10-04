@@ -125,6 +125,7 @@
     margin-left: 10px;
     flex-shrink: 0;
   }
+  .song-score.none { color: #555; }
   .empty-msg {
     color: #777;
     font-size: 15px;
@@ -340,7 +341,7 @@
       <input type="text" id="inputArtistYomi" placeholder="れみおろめん">
     </div>
     <div class="field">
-      <label for="inputScore">得点</label>
+      <label for="inputScore">得点（空欄でもOK）</label>
       <input type="number" id="inputScore" step="0.1" placeholder="90.0">
     </div>
     <div class="field checkbox-row">
@@ -404,7 +405,11 @@
       list = list.filter(function(s) { return s.favorite; });
     }
     if (sortMode === 'score') {
-      list.sort(function(a, b) { return b.score - a.score; });
+      list.sort(function(a, b) {
+        var sa = a.score == null ? -Infinity : a.score;
+        var sb = b.score == null ? -Infinity : b.score;
+        return sa === sb ? 0 : (sb > sa ? 1 : -1);
+      });
     } else if (sortMode === 'title') {
       list.sort(function(a, b) { return (a.yomi || a.title).localeCompare(b.yomi || b.title, 'ja'); });
     } else if (sortMode === 'artist') {
@@ -427,7 +432,7 @@
             '<p class="song-name">' + escapeHtml(s.title) + '</p>' +
             '<p class="song-artist">' + escapeHtml(s.artist || '') + '</p>' +
           '</div>' +
-          '<div class="song-score" data-open="' + s.id + '">' + s.score + '</div>' +
+          '<div class="song-score' + (s.score == null ? ' none' : '') + '" data-open="' + s.id + '">' + (s.score == null ? '－' : s.score) + '</div>' +
           '<button class="edit-btn" data-edit="' + s.id + '">&#9998;</button>' +
         '</div>';
     }).join('');
@@ -528,7 +533,7 @@
     inputYomi.value = s.yomi || '';
     inputArtist.value = s.artist || '';
     inputArtistYomi.value = s.artistYomi || '';
-    inputScore.value = s.score;
+    inputScore.value = s.score == null ? '' : s.score;
     inputFav.checked = !!s.favorite;
     formError.hidden = true;
     addModal.hidden = false;
@@ -567,11 +572,12 @@
       formError.hidden = false;
       return;
     }
-    if (scoreVal === '' || isNaN(Number(scoreVal))) {
-      formError.textContent = '得点を数字で入力してください';
+    if (scoreVal !== '' && isNaN(Number(scoreVal))) {
+      formError.textContent = '得点は数字で入力してください';
       formError.hidden = false;
       return;
     }
+    var scoreNum = scoreVal === '' ? null : Number(scoreVal);
 
     if (editingId) {
       var s = songs.find(function(x) { return x.id === editingId; });
@@ -580,7 +586,7 @@
         s.yomi = yomi;
         s.artist = artist;
         s.artistYomi = artistYomi;
-        s.score = Number(scoreVal);
+        s.score = scoreNum;
         s.favorite = inputFav.checked;
         s.addedAt = Date.now();
       }
@@ -591,7 +597,7 @@
         yomi: yomi,
         artist: artist,
         artistYomi: artistYomi,
-        score: Number(scoreVal),
+        score: scoreNum,
         favorite: inputFav.checked,
         addedAt: Date.now()
       });
