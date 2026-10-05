@@ -1,6 +1,6 @@
 {
-  "name": "うたログ",
-  "short_name": "うたログ",
+  "name": "ベストログ",
+  "short_name": "ベストログ",
   "description": "カラオケの得点を記録・並び替えできるアプリ",
   "id": "/utalog/app-v2",
   "start_url": "./",

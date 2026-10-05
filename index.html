@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>うたログ</title>
+<title>ベストログ</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#161616">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="うたログ">
+<meta name="apple-mobile-web-app-title" content="ベストログ">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <style>
@@ -281,7 +281,7 @@
 
 <div class="app">
   <header>
-    <h1 class="app-title">うたログ</h1>
+    <h1 class="app-title">ベストログ</h1>
     <input type="text" id="search" placeholder="曲名で検索">
     <div class="sort-row">
       <button class="sort-opt active" data-sort="score">得点順</button>
@@ -650,7 +650,7 @@
     var today = new Date();
     var stamp = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     a.href = url;
-    a.download = 'うたログ_' + stamp + '.json';
+    a.download = 'ベストログ_' + stamp + '.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -675,7 +675,7 @@
         return;
       }
       if (!data || !Array.isArray(data.songs)) {
-        alert('このファイルは、うたログのデータではないようです。');
+        alert('このファイルは、ベストログのデータではないようです。');
         return;
       }
       if (!confirm('読み込むと、今この端末にあるデータは読み込んだ内容に置き換わります。よろしいですか？')) return;
