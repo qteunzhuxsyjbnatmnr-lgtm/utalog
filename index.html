@@ -207,6 +207,17 @@
   }
   .backup-row { display: flex; gap: 10px; }
   .backup-row .btn-secondary { flex: 1; }
+  .export-notice { margin-top: 12px; font-size: 13px; color: #bdbdbd; line-height: 1.6; }
+  .export-notice p { margin: 0 0 6px; color: #21C58C; }
+  .donate-link { display: inline-block; color: #9a9a9a; font-size: 12px; text-decoration: underline; }
+  .export-notice[hidden], .donate-link[hidden], .ad-section[hidden] { display: none; }
+  .ad-section { margin-top: 72px; }
+  .ad-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 11px; color: #777; }
+  .ad-pr { border: 1px solid #444; border-radius: 4px; padding: 1px 4px; }
+  #adBox { min-height: 50px; overflow: hidden; }
+  #adBox img { max-width: 100%; height: auto; }
+  .privacy-link { margin: 32px 0 8px; text-align: center; font-size: 12px; }
+  .privacy-link a { color: #777; }
   .modal {
     position: fixed;
     inset: 0;
@@ -315,7 +326,18 @@
       <button class="btn-secondary" id="importBtn">読み込む</button>
       <input type="file" id="importFile" accept="application/json" hidden>
     </div>
+    <div class="export-notice" id="exportNotice" hidden>
+      <p>書き出しました。バックアップのファイルを保存しました。</p>
+      <a class="donate-link" id="donateLink" target="_blank" rel="noopener noreferrer" hidden>☕ 役に立ったら応援する</a>
+    </div>
   </section>
+
+  <section class="ad-section" id="adSection" hidden>
+    <div class="ad-head"><span>広告を含みます</span><span class="ad-pr">PR</span></div>
+    <div id="adBox"></div>
+  </section>
+
+  <p class="privacy-link"><a href="privacy.html">プライバシーポリシー</a></p>
 </div>
 
 <div class="modal" id="addModal" hidden>
@@ -655,6 +677,12 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    document.getElementById('exportNotice').hidden = false;
+    if (DONATE_URL) {
+      var dl = document.getElementById('donateLink');
+      dl.href = DONATE_URL;
+      dl.hidden = false;
+    }
   });
 
   document.getElementById('importBtn').addEventListener('click', function() {
@@ -689,6 +717,16 @@
     };
     reader.readAsText(file);
   });
+
+  // 収益化の設定。空のあいだは、画面に何も出ない。
+  //   DONATE_URL : 寄付(応援)ページのアドレス。書き出した後に、リンクが出る
+  //   AD_HTML    : 広告のコード(画像つきリンクなど)。ページの一番下に、広告の枠が出る
+  var DONATE_URL = '';
+  var AD_HTML = '';
+  if (AD_HTML) {
+    document.getElementById('adBox').innerHTML = AD_HTML;
+    document.getElementById('adSection').hidden = false;
+  }
 
   renderSongs();
   renderNext();
