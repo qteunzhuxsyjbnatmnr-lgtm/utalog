@@ -707,6 +707,9 @@
 
   deleteBtn.addEventListener('click', function() {
     if (!editingId) return;
+    var target = songs.find(function(x) { return x.id === editingId; });
+    var label = target ? '「' + target.title + '」' + (target.score == null ? '' : '（' + target.score + '）') : 'この曲';
+    if (!confirm(label + 'を削除します。元に戻せません。よろしいですか？')) return;
     songs = songs.filter(function(x) { return x.id !== editingId; });
     saveSongs();
     renderSongs();
