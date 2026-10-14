@@ -210,28 +210,8 @@
     font-weight: bold;
     cursor: pointer;
   }
-  .help-steps { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 16px; counter-reset: step; }
-  .help-steps > li {
-    counter-increment: step;
-    display: grid;
-    grid-template-columns: 30px minmax(0, 1fr);
-    gap: 12px;
-    align-items: start;
-  }
-  .help-steps > li::before {
-    content: counter(step);
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    background: #21c58c;
-    color: #08251a;
-    font-weight: bold;
-    display: grid; place-items: center;
-  }
-  .help-steps h3 { margin: 2px 0 4px; font-size: 16px; color: #f2f2f2; }
-  .help-steps p { margin: 0; font-size: 14px; line-height: 1.7; color: #aaa; }
-  .help-os { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .help-os li { padding: 10px 12px; border: 1px solid #333; border-radius: 10px; background: #232323; font-size: 14px; line-height: 1.7; color: #ddd; }
-  .help-os b { display: block; font-size: 13px; color: #21c58c; margin-bottom: 2px; }
+  .help-notes { margin: 0 0 16px; padding-left: 1.2em; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.8; color: #ddd; }
+  .help-notes li::marker { color: #21c58c; }
   textarea {
     width: 100%;
     font-size: 16px;
@@ -430,24 +410,12 @@
     <div class="modal-header-row">
       <h2>使い方</h2>
     </div>
-    <ol class="help-steps">
-      <li>
-        <div>
-          <h3>ホーム画面に追加する</h3>
-          <p>次に開きやすくなります。</p>
-          <ul class="help-os">
-            <li><b>Android</b>右上の「︙」→「アプリをインストール」または「ホーム画面に追加」</li>
-            <li><b>iPhone</b>下の共有ボタン→「ホーム画面に追加」</li>
-          </ul>
-        </div>
-      </li>
-      <li>
-        <div>
-          <h3>曲を記録する</h3>
-          <p>「＋ 曲を追加」から、曲名と得点を入れます。得点は空欄でも保存できます。</p>
-        </div>
-      </li>
-    </ol>
+    <ul class="help-notes">
+      <li>最初は空っぽです。</li>
+      <li>記録は、そのスマホの中にだけ保存されます。ブラウザのデータを消すと、記録も消えることがあります。</li>
+      <li>画面の一番下の「書き出す」で、バックアップのファイルを作れます。</li>
+      <li>今使っているメモがあれば、「メモからまとめて登録」でまとめて入れられます。</li>
+    </ul>
     <div class="modal-actions">
       <button class="btn-primary" id="helpCloseBtn" type="button">閉じる</button>
     </div>
