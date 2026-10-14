@@ -168,9 +168,8 @@
   .help-notes { margin: 0 0 16px; padding-left: 1.2em; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.8; color: #ddd; }
   .help-notes li::marker { color: #21c58c; }
   .help-sub { margin: 20px 0 10px; font-size: 16px; color: #f2f2f2; }
-  .help-make { margin: 0 0 12px; padding-left: 1.4em; display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.8; color: #ccc; }
-  .help-make li::marker { color: #21c58c; font-weight: bold; }
-  .help-foot { margin: 0 0 16px; font-size: 14px; line-height: 1.7; color: #21c58c; }
+  .help-make { margin: 0 0 16px; padding-left: 1.2em; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.8; color: #ddd; }
+  .help-make li::marker { color: #21c58c; }
   textarea {
     width: 100%;
     font-size: 16px;
@@ -368,16 +367,16 @@
       <li>右上の「機能」ボタンの「書き出す」で、バックアップのファイルを作れます。</li>
       <li>今使っているメモがあれば、「機能」ボタンの「メモからまとめて登録」でまとめて入れられます。</li>
     </ul>
-    <h3 class="help-sub">このアプリの作り方</h3>
-    <ol class="help-make">
-      <li>まず、困っていることをAI（Claude）に話しました。いつ、どこで、何が嫌だったかを質問してもらい、アプリで解決したいことを整理しました。</li>
-      <li>AIが出してくれた3つのアプリ案から、使いたいものを1つ選びました。</li>
-      <li>画面に何があるか、どんな順番で使うかを「設計図」にまとめました。</li>
-      <li>3つのデザイン案から、見た目を選びました。</li>
-      <li>実際に使いながら、「検索がほしい」「メモからまとめて登録したい」など、足りない機能を日本語で伝えて、少しずつ作り足しました。</li>
-      <li>できあがったアプリを、無料の公開サービスに置いて、スマホのホーム画面から開けるようにしました。</li>
-    </ol>
-    <p class="help-foot">プログラミングの知識がなくても、日本語で相談するだけで作れます。</p>
+    <h3 class="help-sub">こんなことができます</h3>
+    <ul class="help-make">
+      <li>曲名を押すと、その曲をYouTubeで探せます。</li>
+      <li>編集するときは、鉛筆マークを押してください。曲名・得点・アーティストなどを直せます。曲を消したいときも、ここから消せます。</li>
+      <li>星マークを押すと、お気に入りに入ります。「★ お気に入りのみ」を押すと、お気に入りだけを表示できます。</li>
+      <li>「得点順」「曲名順」「アーティスト順」「更新順」を押すと、並び替えができます。</li>
+      <li>検索欄に曲名を入れると、歌ったことがある曲かすぐ調べられます。よみがなを入れておくと、ひらがなでも見つかります。</li>
+      <li>同じ曲を何回歌っても、1回ずつ別の記録として残せます。</li>
+      <li>得点は空欄でも保存できます。あとから鉛筆マークで入れられます。</li>
+    </ul>
     <div class="modal-actions">
       <button class="btn-primary" id="helpCloseBtn" type="button">閉じる</button>
     </div>
