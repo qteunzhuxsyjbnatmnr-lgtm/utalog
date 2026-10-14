@@ -156,12 +156,12 @@
   .help-btn {
     flex-shrink: 0;
     min-height: 40px;
-    padding: 8px 11px;
+    padding: 8px 9px;
     border-radius: 999px;
     border: 1px solid #21c58c;
     background: none;
     color: #21c58c;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
   }
@@ -229,8 +229,9 @@
   .ad-pr { border: 1px solid #444; border-radius: 4px; padding: 1px 4px; }
   #adBox { min-height: 50px; overflow: hidden; }
   #adBox img { max-width: 100%; height: auto; }
-  .privacy-link { margin: 32px 0 8px; text-align: center; font-size: 12px; }
-  .privacy-link a { color: #777; }
+  .help-link { margin: 0 0 16px; text-align: center; font-size: 13px; }
+  .help-link a { color: #9a9a9a; text-decoration: underline; }
+  a.help-btn { display: inline-flex; align-items: center; text-decoration: none; }
   .modal {
     position: fixed;
     inset: 0;
@@ -308,6 +309,7 @@
     <div class="head-row">
       <h1 class="app-title">ベストログ <small style="display:block;margin-top:2px;font-size:12px;font-weight:normal;color:#9a9a9a;">-カラオケ得点記録-</small></h1>
       <div class="head-actions">
+        <a class="help-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScYi_0YnlvlL23Xfx-07ko7AxoR2_kPt9O-NXyz-drJ4WwtPQ/viewform" target="_blank" rel="noopener noreferrer">問い合わせ</a>
         <button class="help-btn" id="menuOpenBtn" type="button" aria-label="機能を開く">機能</button>
         <button class="help-btn" id="helpOpenBtn" type="button" aria-label="使い方を見る">使い方</button>
       </div>
@@ -332,7 +334,6 @@
     <div id="adBox"></div>
   </section>
 
-  <p class="privacy-link"><a href="privacy.html">プライバシーポリシー</a></p>
 </div>
 
 <div class="modal" id="menuModal" hidden>
@@ -377,6 +378,7 @@
       <li>同じ曲を何回歌っても、1回ずつ別の記録として残せます。</li>
       <li>得点は空欄でも保存できます。あとから鉛筆マークで入れられます。</li>
     </ul>
+    <p class="help-link"><a href="privacy.html">プライバシーポリシー</a></p>
     <div class="modal-actions">
       <button class="btn-primary" id="helpCloseBtn" type="button">閉じる</button>
     </div>
