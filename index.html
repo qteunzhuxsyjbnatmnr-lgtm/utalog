@@ -195,6 +195,43 @@
     font-size: 14px;
     margin: 4px 0 0;
   }
+  .head-row { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; }
+  .head-row .app-title { margin: 0; }
+  .help-btn {
+    flex-shrink: 0;
+    margin-left: auto;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid #21c58c;
+    background: none;
+    color: #21c58c;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .help-steps { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 16px; counter-reset: step; }
+  .help-steps > li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .help-steps > li::before {
+    content: counter(step);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #21c58c;
+    color: #08251a;
+    font-weight: bold;
+    display: grid; place-items: center;
+  }
+  .help-steps h3 { margin: 2px 0 4px; font-size: 16px; color: #f2f2f2; }
+  .help-steps p { margin: 0; font-size: 14px; line-height: 1.7; color: #aaa; }
+  .help-os { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .help-os li { padding: 10px 12px; border: 1px solid #333; border-radius: 10px; background: #232323; font-size: 14px; line-height: 1.7; color: #ddd; }
+  .help-os b { display: block; font-size: 13px; color: #21c58c; margin-bottom: 2px; }
   textarea {
     width: 100%;
     font-size: 16px;
@@ -331,7 +368,10 @@
 
 <div class="app">
   <header>
-    <h1 class="app-title">ベストログ <small style="display:block;margin-top:2px;font-size:13px;font-weight:normal;color:#9a9a9a;">-カラオケ得点記録-</small></h1>
+    <div class="head-row">
+      <h1 class="app-title">ベストログ <small style="display:block;margin-top:2px;font-size:13px;font-weight:normal;color:#9a9a9a;">-カラオケ得点記録-</small></h1>
+      <button class="help-btn" id="helpOpenBtn" type="button" aria-label="使い方を見る">使い方</button>
+    </div>
     <input type="text" id="search" placeholder="曲名で検索">
     <div class="sort-row">
       <button class="sort-opt active" data-sort="score">得点順</button>
@@ -383,6 +423,35 @@
   </section>
 
   <p class="privacy-link"><a href="privacy.html">プライバシーポリシー</a></p>
+</div>
+
+<div class="modal" id="helpModal" hidden>
+  <div class="modal-content memo-content">
+    <div class="modal-header-row">
+      <h2>使い方</h2>
+    </div>
+    <ol class="help-steps">
+      <li>
+        <div>
+          <h3>ホーム画面に追加する</h3>
+          <p>次に開きやすくなります。</p>
+          <ul class="help-os">
+            <li><b>Android</b>右上の「︙」→「アプリをインストール」または「ホーム画面に追加」</li>
+            <li><b>iPhone</b>下の共有ボタン→「ホーム画面に追加」</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>曲を記録する</h3>
+          <p>「＋ 曲を追加」から、曲名と得点を入れます。得点は空欄でも保存できます。</p>
+        </div>
+      </li>
+    </ol>
+    <div class="modal-actions">
+      <button class="btn-primary" id="helpCloseBtn" type="button">閉じる</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal" id="memoModal" hidden>
@@ -970,6 +1039,11 @@
     document.getElementById('adBox').innerHTML = AD_HTML;
     document.getElementById('adSection').hidden = false;
   }
+
+  var helpModal = document.getElementById('helpModal');
+  document.getElementById('helpOpenBtn').addEventListener('click', function() { helpModal.hidden = false; });
+  document.getElementById('helpCloseBtn').addEventListener('click', function() { helpModal.hidden = true; });
+  helpModal.addEventListener('click', function(e) { if (e.target === helpModal) helpModal.hidden = true; });
 
   var YOMI_FILL_KEY = 'utalog_yomi_fill_v1';
   if (!localStorage.getItem(YOMI_FILL_KEY)) {
