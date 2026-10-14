@@ -231,7 +231,18 @@
   #adBox img { max-width: 100%; height: auto; }
   .help-link { margin: 0 0 16px; text-align: center; font-size: 13px; }
   .help-link a { color: #9a9a9a; text-decoration: underline; }
-  a.help-btn { display: inline-flex; align-items: center; text-decoration: none; }
+  .contact-open {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 13px;
+    margin: 0 0 14px;
+    border-radius: 10px;
+    background: #21c58c;
+    color: #08251a;
+    font-size: 16px;
+    font-weight: bold;
+  }
   .modal {
     position: fixed;
     inset: 0;
@@ -309,7 +320,7 @@
     <div class="head-row">
       <h1 class="app-title">ベストログ <small style="display:block;margin-top:2px;font-size:12px;font-weight:normal;color:#9a9a9a;">-カラオケ得点記録-</small></h1>
       <div class="head-actions">
-        <a class="help-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScYi_0YnlvlL23Xfx-07ko7AxoR2_kPt9O-NXyz-drJ4WwtPQ/viewform" target="_blank" rel="noopener noreferrer">問い合わせ</a>
+        <button class="help-btn" id="contactOpenBtn" type="button" aria-label="問い合わせの案内を開く">問い合わせ</button>
         <button class="help-btn" id="menuOpenBtn" type="button" aria-label="機能を開く">機能</button>
         <button class="help-btn" id="helpOpenBtn" type="button" aria-label="使い方を見る">使い方</button>
       </div>
@@ -334,6 +345,23 @@
     <div id="adBox"></div>
   </section>
 
+</div>
+
+<div class="modal" id="contactModal" hidden>
+  <div class="modal-content memo-content">
+    <div class="modal-header-row">
+      <h2>お問い合わせ</h2>
+    </div>
+    <p class="memo-summary">ご意見、不具合のご連絡、ご質問は、次のお問い合わせフォーム（Google フォーム）からお送りください。</p>
+    <a class="contact-open" href="https://docs.google.com/forms/d/e/1FAIpQLScYi_0YnlvlL23Xfx-07ko7AxoR2_kPt9O-NXyz-drJ4WwtPQ/viewform" target="_blank" rel="noopener noreferrer">お問い合わせフォームを開く</a>
+    <ul class="help-notes">
+      <li>フォームに入力した内容は、Google のサービスに保存されます。運営者が、返信と改善のためにだけ使います。</li>
+      <li>連絡先（メールアドレスなど）の入力は、任意です。返信が必要な場合だけ入力してください。</li>
+    </ul>
+    <div class="modal-actions">
+      <button class="btn-primary" id="contactCloseBtn" type="button">閉じる</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal" id="menuModal" hidden>
@@ -924,6 +952,11 @@
     document.getElementById('adBox').innerHTML = AD_HTML;
     document.getElementById('adSection').hidden = false;
   }
+
+  var contactModal = document.getElementById('contactModal');
+  document.getElementById('contactOpenBtn').addEventListener('click', function() { contactModal.hidden = false; });
+  document.getElementById('contactCloseBtn').addEventListener('click', function() { contactModal.hidden = true; });
+  contactModal.addEventListener('click', function(e) { if (e.target === contactModal) contactModal.hidden = true; });
 
   var menuModal = document.getElementById('menuModal');
   document.getElementById('menuOpenBtn').addEventListener('click', function() {
