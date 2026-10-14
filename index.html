@@ -486,6 +486,10 @@
     return toHiragana(String(str).toLowerCase());
   }
 
+  function formatScore(v) {
+    return v == null ? '－' : Number(v).toFixed(3);
+  }
+
   function makeYomi(title) {
     var hira = toHiragana(title);
     if (!/[一-鿿㐀-䶿々]/.test(title)) return hira;
@@ -531,7 +535,7 @@
             '<p class="song-name">' + escapeHtml(s.title) + '</p>' +
             '<p class="song-artist">' + escapeHtml(s.artist || '') + '</p>' +
           '</div>' +
-          '<div class="song-score' + (s.score == null ? ' none' : '') + '" data-open="' + s.id + '">' + (s.score == null ? '－' : s.score) + '</div>' +
+          '<div class="song-score' + (s.score == null ? ' none' : '') + '" data-open="' + s.id + '">' + formatScore(s.score) + '</div>' +
           '<button class="edit-btn" data-edit="' + s.id + '">&#9998;</button>' +
         '</div>';
     }).join('');
@@ -632,7 +636,7 @@
     inputYomi.value = s.yomi || '';
     inputArtist.value = s.artist || '';
     inputArtistYomi.value = s.artistYomi || '';
-    inputScore.value = s.score == null ? '' : s.score;
+    inputScore.value = s.score == null ? '' : Number(s.score).toFixed(3);
     inputFav.checked = !!s.favorite;
     formError.hidden = true;
     addModal.hidden = false;
@@ -871,7 +875,7 @@
         '<input type="checkbox" data-memo="' + i + '"' + (e.include ? ' checked' : '') + '>' +
         '<span class="memo-main"><span class="memo-title">' + escapeHtml(e.title) + '</span>' +
         (e.note ? '<span class="memo-note">' + escapeHtml(e.note) + '</span>' : '') + '</span>' +
-        '<span class="memo-score">' + (e.score == null ? '－' : e.score) + '</span>' +
+        '<span class="memo-score">' + formatScore(e.score) + '</span>' +
       '</label>';
     }).join('');
     updateMemoCount();
