@@ -145,73 +145,32 @@
     color: #08251a;
     cursor: pointer;
   }
-  .next-section {
-    padding: 18px 18px 26px;
-    border-top: 1px solid #2a2a2a;
-    background: #1c1c1c;
-    margin-top: 10px;
-  }
-  h2.next-title {
-    font-size: 15px;
-    font-weight: bold;
-    color: #ccc;
-    margin: 0 0 10px;
-  }
-  .next-input-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .next-input-row input { flex: 1; }
-  .next-add-btn {
-    font-size: 15px;
-    font-weight: bold;
-    padding: 0 18px;
-    border-radius: 10px;
-    border: none;
-    background: #333;
-    color: #eee;
-    cursor: pointer;
-  }
-  .next-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    color: #ddd;
-    padding: 9px 2px;
-    border-bottom: 1px dashed #2a2a2a;
-  }
-  .next-del {
-    background: none;
-    border: none;
-    color: #888;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 4px 8px;
-  }
   .error {
     color: #ff8080;
     font-size: 14px;
     margin: 4px 0 0;
   }
-  .head-row { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; }
-  .head-row .app-title { margin: 0; }
+  .head-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: 0 0 14px; }
+  .head-row .app-title { margin: 0; white-space: nowrap; font-size: 21px; }
+  .head-actions { display: flex; gap: 6px; margin-left: auto; flex-shrink: 0; }
   .help-btn {
     flex-shrink: 0;
-    margin-left: auto;
     min-height: 40px;
-    padding: 8px 14px;
+    padding: 8px 11px;
     border-radius: 999px;
     border: 1px solid #21c58c;
     background: none;
     color: #21c58c;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
   }
   .help-notes { margin: 0 0 16px; padding-left: 1.2em; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.8; color: #ddd; }
   .help-notes li::marker { color: #21c58c; }
+  .help-sub { margin: 20px 0 10px; font-size: 16px; color: #f2f2f2; }
+  .help-make { margin: 0 0 12px; padding-left: 1.4em; display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.8; color: #ccc; }
+  .help-make li::marker { color: #21c58c; font-weight: bold; }
+  .help-foot { margin: 0 0 16px; font-size: 14px; line-height: 1.7; color: #21c58c; }
   textarea {
     width: 100%;
     font-size: 16px;
@@ -224,11 +183,6 @@
     resize: vertical;
   }
   textarea::placeholder { color: #777; }
-  .memo-section {
-    padding: 18px 18px 8px;
-    border-top: 1px solid #2a2a2a;
-  }
-  .memo-section .btn-secondary { width: 100%; }
   .memo-content { max-height: 92vh; overflow-x: hidden; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #444 #1c1c1c; }
   .memo-summary { font-size: 14px; color: #ccc; line-height: 1.6; margin: 0 0 10px; }
   #memoPreview { max-height: 42vh; overflow-x: hidden; overflow-y: auto; margin-bottom: 8px; scrollbar-width: thin; scrollbar-color: #444 #1c1c1c; }
@@ -251,19 +205,23 @@
   }
   .memo-note { font-size: 12px; color: #e0b13a; }
   .memo-score { font-size: 16px; font-weight: bold; color: #21c58c; flex-shrink: 0; }
-  .backup-section {
-    padding: 18px 18px 30px;
-    border-top: 1px solid #2a2a2a;
+  .menu-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    background: #232323;
+    color: #eee;
+    font-family: inherit;
+    cursor: pointer;
   }
-  .backup-desc {
-    font-size: 13px;
-    color: #888;
-    line-height: 1.6;
-    margin: 0 0 12px;
-  }
-  .backup-row { display: flex; gap: 10px; }
-  .backup-row .btn-secondary { flex: 1; }
-  .export-notice { margin-top: 12px; font-size: 13px; color: #bdbdbd; line-height: 1.6; }
+  .menu-item b { font-size: 16px; color: #f2f2f2; }
+  .menu-item span { font-size: 13px; line-height: 1.6; color: #999; }
+  .export-notice { margin: 0 0 12px; font-size: 13px; color: #bdbdbd; line-height: 1.6; }
   .export-notice p { margin: 0 0 6px; color: #21C58C; }
   .donate-link { display: inline-block; color: #9a9a9a; font-size: 12px; text-decoration: underline; }
   .export-notice[hidden], .donate-link[hidden], .ad-section[hidden] { display: none; }
@@ -349,8 +307,11 @@
 <div class="app">
   <header>
     <div class="head-row">
-      <h1 class="app-title">ベストログ <small style="display:block;margin-top:2px;font-size:13px;font-weight:normal;color:#9a9a9a;">-カラオケ得点記録-</small></h1>
-      <button class="help-btn" id="helpOpenBtn" type="button" aria-label="使い方を見る">使い方</button>
+      <h1 class="app-title">ベストログ <small style="display:block;margin-top:2px;font-size:12px;font-weight:normal;color:#9a9a9a;">-カラオケ得点記録-</small></h1>
+      <div class="head-actions">
+        <button class="help-btn" id="menuOpenBtn" type="button" aria-label="機能を開く">機能</button>
+        <button class="help-btn" id="helpOpenBtn" type="button" aria-label="使い方を見る">使い方</button>
+      </div>
     </div>
     <input type="text" id="search" placeholder="曲名で検索">
     <div class="sort-row">
@@ -367,42 +328,33 @@
     <div class="song-list" id="songList"></div>
   </main>
 
-  <section class="next-section">
-    <h2 class="next-title">次回歌いたい曲</h2>
-    <div class="next-input-row">
-      <input type="text" id="nextInput" placeholder="曲名を入力">
-      <button class="next-add-btn" id="nextAddBtn">追加</button>
-    </div>
-    <p class="error" id="nextError" hidden>曲名を入力してください</p>
-    <div id="nextList"></div>
-  </section>
-
-  <section class="memo-section">
-    <h2 class="next-title">メモからまとめて登録</h2>
-    <p class="backup-desc">今使っているメモの内容を貼り付けると、曲名と得点を読み取って、まとめて登録できます。登録する前に、読み取った内容を確認できます。</p>
-    <button class="btn-secondary" id="memoOpenBtn">メモを貼り付けて登録</button>
-  </section>
-
-  <section class="backup-section">
-    <h2 class="next-title">他の端末とデータをやりとり</h2>
-    <p class="backup-desc">「書き出す」でファイルを作り、そのファイルを別の端末に送ってから「読み込む」を押すと、そちらのデータをこの端末にコピーできます。読み込むと今のデータは上書きされます。</p>
-    <div class="backup-row">
-      <button class="btn-secondary" id="exportBtn">書き出す</button>
-      <button class="btn-secondary" id="importBtn">読み込む</button>
-      <input type="file" id="importFile" accept="application/json" hidden>
-    </div>
-    <div class="export-notice" id="exportNotice" hidden>
-      <p>書き出しました。バックアップのファイルを保存しました。</p>
-      <a class="donate-link" id="donateLink" target="_blank" rel="noopener noreferrer" hidden>☕ 役に立ったら応援する</a>
-    </div>
-  </section>
-
   <section class="ad-section" id="adSection" hidden>
     <div class="ad-head"><span>広告を含みます</span><span class="ad-pr">PR</span></div>
     <div id="adBox"></div>
   </section>
 
   <p class="privacy-link"><a href="privacy.html">プライバシーポリシー</a></p>
+</div>
+
+<div class="modal" id="menuModal" hidden>
+  <div class="modal-content memo-content">
+    <div class="modal-header-row">
+      <h2>機能</h2>
+    </div>
+    <div class="menu-list">
+      <button class="menu-item" id="memoOpenBtn" type="button"><b>メモからまとめて登録</b><span>メモの内容を貼り付けて、曲名と得点をまとめて登録します。登録する前に、読み取った内容を確認できます。</span></button>
+      <button class="menu-item" id="exportBtn" type="button"><b>書き出す</b><span>記録をバックアップのファイルとして保存します。別の端末に移すときにも使います。</span></button>
+      <button class="menu-item" id="importBtn" type="button"><b>読み込む</b><span>バックアップのファイルから記録を取り込みます。今の記録は読み込んだ内容に置き換わります。</span></button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+    <div class="export-notice" id="exportNotice" hidden>
+      <p>書き出しました。バックアップのファイルを保存しました。</p>
+      <a class="donate-link" id="donateLink" target="_blank" rel="noopener noreferrer" hidden>☕ 役に立ったら応援する</a>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="menuCloseBtn" type="button">閉じる</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal" id="helpModal" hidden>
@@ -413,9 +365,19 @@
     <ul class="help-notes">
       <li>最初は空っぽです。</li>
       <li>記録は、そのスマホの中にだけ保存されます。ブラウザのデータを消すと、記録も消えることがあります。</li>
-      <li>画面の一番下の「書き出す」で、バックアップのファイルを作れます。</li>
-      <li>今使っているメモがあれば、「メモからまとめて登録」でまとめて入れられます。</li>
+      <li>右上の「機能」ボタンの「書き出す」で、バックアップのファイルを作れます。</li>
+      <li>今使っているメモがあれば、「機能」ボタンの「メモからまとめて登録」でまとめて入れられます。</li>
     </ul>
+    <h3 class="help-sub">このアプリの作り方</h3>
+    <ol class="help-make">
+      <li>まず、困っていることをAI（Claude）に話しました。いつ、どこで、何が嫌だったかを質問してもらい、アプリで解決したいことを整理しました。</li>
+      <li>AIが出してくれた3つのアプリ案から、使いたいものを1つ選びました。</li>
+      <li>画面に何があるか、どんな順番で使うかを「設計図」にまとめました。</li>
+      <li>3つのデザイン案から、見た目を選びました。</li>
+      <li>実際に使いながら、「検索がほしい」「メモからまとめて登録したい」など、足りない機能を日本語で伝えて、少しずつ作り足しました。</li>
+      <li>できあがったアプリを、無料の公開サービスに置いて、スマホのホーム画面から開けるようにしました。</li>
+    </ol>
+    <p class="help-foot">プログラミングの知識がなくても、日本語で相談するだけで作れます。</p>
     <div class="modal-actions">
       <button class="btn-primary" id="helpCloseBtn" type="button">閉じる</button>
     </div>
@@ -488,20 +450,17 @@
 
 <script>
   var SONGS_KEY = 'utalog_songs';
-  var NEXT_KEY = 'utalog_next';
 
   var SEED_SONGS = [];
 
   var songsRaw = localStorage.getItem(SONGS_KEY);
   var songs = songsRaw === null ? SEED_SONGS.slice() : JSON.parse(songsRaw);
-  var nextSongs = JSON.parse(localStorage.getItem(NEXT_KEY) || '[]');
   if (songsRaw === null) { saveSongs(); }
   var sortMode = 'score';
   var favoritesOnly = false;
   var searchText = '';
 
   function saveSongs() { localStorage.setItem(SONGS_KEY, JSON.stringify(songs)); }
-  function saveNext() { localStorage.setItem(NEXT_KEY, JSON.stringify(nextSongs)); }
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function(c) {
@@ -574,21 +533,6 @@
           '</div>' +
           '<div class="song-score' + (s.score == null ? ' none' : '') + '" data-open="' + s.id + '">' + formatScore(s.score) + '</div>' +
           '<button class="edit-btn" data-edit="' + s.id + '">&#9998;</button>' +
-        '</div>';
-    }).join('');
-  }
-
-  function renderNext() {
-    var container = document.getElementById('nextList');
-    if (nextSongs.length === 0) {
-      container.innerHTML = '';
-      return;
-    }
-    container.innerHTML = nextSongs.map(function(n) {
-      return '' +
-        '<div class="next-item">' +
-          '<span>' + escapeHtml(n.title) + '</span>' +
-          '<button class="next-del" data-del="' + n.id + '">&times;</button>' +
         '</div>';
     }).join('');
   }
@@ -757,35 +701,8 @@
     addModal.hidden = true;
   });
 
-  var nextInput = document.getElementById('nextInput');
-  var nextError = document.getElementById('nextError');
-
-  document.getElementById('nextAddBtn').addEventListener('click', function() {
-    var title = nextInput.value.trim();
-    if (!title) {
-      nextError.hidden = false;
-      return;
-    }
-    nextError.hidden = true;
-    nextSongs.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7), title: title });
-    saveNext();
-    renderNext();
-    nextInput.value = '';
-  });
-
-  nextInput.addEventListener('input', function() { nextError.hidden = true; });
-
-  document.getElementById('nextList').addEventListener('click', function(e) {
-    var delId = e.target.getAttribute('data-del');
-    if (delId) {
-      nextSongs = nextSongs.filter(function(n) { return n.id !== delId; });
-      saveNext();
-      renderNext();
-    }
-  });
-
   document.getElementById('exportBtn').addEventListener('click', function() {
-    var data = JSON.stringify({ songs: songs, nextSongs: nextSongs });
+    var data = JSON.stringify({ songs: songs });
     var blob = new Blob([data], { type: 'application/json' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -828,11 +745,9 @@
       }
       if (!confirm('読み込むと、今この端末にあるデータは読み込んだ内容に置き換わります。よろしいですか？')) return;
       songs = data.songs;
-      nextSongs = Array.isArray(data.nextSongs) ? data.nextSongs : [];
       saveSongs();
-      saveNext();
       renderSongs();
-      renderNext();
+      menuModal.hidden = true;
       alert('読み込みました');
     };
     reader.readAsText(file);
@@ -919,6 +834,7 @@
   }
 
   document.getElementById('memoOpenBtn').addEventListener('click', function() {
+    menuModal.hidden = true;
     memoText.value = '';
     memoError.hidden = true;
     memoStep1.hidden = false;
@@ -1008,6 +924,14 @@
     document.getElementById('adSection').hidden = false;
   }
 
+  var menuModal = document.getElementById('menuModal');
+  document.getElementById('menuOpenBtn').addEventListener('click', function() {
+    document.getElementById('exportNotice').hidden = true;
+    menuModal.hidden = false;
+  });
+  document.getElementById('menuCloseBtn').addEventListener('click', function() { menuModal.hidden = true; });
+  menuModal.addEventListener('click', function(e) { if (e.target === menuModal) menuModal.hidden = true; });
+
   var helpModal = document.getElementById('helpModal');
   document.getElementById('helpOpenBtn').addEventListener('click', function() { helpModal.hidden = false; });
   document.getElementById('helpCloseBtn').addEventListener('click', function() { helpModal.hidden = true; });
@@ -1026,7 +950,6 @@
   }
 
   renderSongs();
-  renderNext();
 </script>
 
 <script>
