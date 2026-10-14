@@ -77,8 +77,8 @@
   .song-list { min-height: 40px; }
   .song-row {
     display: flex;
-    align-items: center;
-    padding: 14px 4px;
+    align-items: stretch;
+    padding: 0 4px;
     border-bottom: 1px solid #232323;
     cursor: pointer;
   }
@@ -87,7 +87,7 @@
     border: none;
     font-size: 20px;
     color: #333;
-    padding: 4px 10px 4px 0;
+    padding: 0 10px 0 0;
     cursor: pointer;
   }
   .star-btn.on { color: #e0b13a; }
@@ -96,11 +96,11 @@
     border: none;
     font-size: 18px;
     color: #777;
-    padding: 4px 2px 4px 10px;
+    padding: 0 2px 0 10px;
     cursor: pointer;
     flex-shrink: 0;
   }
-  .song-info { flex: 1; min-width: 0; }
+  .song-info { flex: 1; min-width: 0; padding: 14px 0; display: flex; flex-direction: column; justify-content: center; }
   .song-name {
     font-size: 17px;
     font-weight: bold;
@@ -122,7 +122,9 @@
     font-size: 20px;
     font-weight: bold;
     color: #21c58c;
-    margin-left: 10px;
+    padding: 14px 0 14px 10px;
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
   }
   .song-score.none { color: #555; }
@@ -398,8 +400,8 @@
     </ul>
     <h3 class="help-sub">こんなことができます</h3>
     <ul class="help-make">
-      <li>曲名を押すと、その曲をYouTubeで探せます。</li>
-      <li>編集するときは、鉛筆マークを押してください。曲名・得点・アーティストなどを直せます。曲を消したいときも、ここから消せます。</li>
+      <li>曲名（得点より左側）を押すと、その曲をYouTubeで探せます。</li>
+      <li>編集するときは、得点か鉛筆マークのあたり（右側）を押してください。曲名・得点・アーティストなどを直せます。曲を消したいときも、ここから消せます。</li>
       <li>星マークを押すと、お気に入りに入ります。「★ お気に入りのみ」を押すと、お気に入りだけを表示できます。</li>
       <li>「得点順」「曲名順」「アーティスト順」「更新順」を押すと、並び替えができます。</li>
       <li>検索欄に曲名を入れると、歌ったことがある曲かすぐ調べられます。よみがなを入れておくと、ひらがなでも見つかります。</li>
@@ -560,7 +562,7 @@
             '<p class="song-name">' + escapeHtml(s.title) + '</p>' +
             '<p class="song-artist">' + escapeHtml(s.artist || '') + '</p>' +
           '</div>' +
-          '<div class="song-score' + (s.score == null ? ' none' : '') + '" data-open="' + s.id + '">' + formatScore(s.score) + '</div>' +
+          '<div class="song-score' + (s.score == null ? ' none' : '') + '" data-edit="' + s.id + '">' + formatScore(s.score) + '</div>' +
           '<button class="edit-btn" data-edit="' + s.id + '">&#9998;</button>' +
         '</div>';
     }).join('');
@@ -597,7 +599,8 @@
       }
       return;
     }
-    var editId = e.target.getAttribute('data-edit');
+    var editEl = e.target.closest('[data-edit]');
+    var editId = editEl ? editEl.getAttribute('data-edit') : null;
     if (editId) {
       openEditModal(editId);
       return;
