@@ -486,6 +486,12 @@
     return toHiragana(String(str).toLowerCase());
   }
 
+  function makeYomi(title) {
+    var hira = toHiragana(title);
+    if (!/[一-鿿㐀-䶿々]/.test(title)) return hira;
+    return hira.replace(/[^ぁ-ゖーa-zA-Z0-9]/g, '');
+  }
+
   function renderSongs() {
     var list = songs.slice();
     if (searchText) {
@@ -637,8 +643,7 @@
     if (inputYomi.value.trim() !== '') return;
     var t = inputTitle.value.trim();
     if (!t) return;
-    if (/[一-鿿㐀-䶿]/.test(t)) return;
-    inputYomi.value = toHiragana(t);
+    inputYomi.value = makeYomi(t);
   });
 
   inputArtist.addEventListener('blur', function() {
@@ -927,11 +932,10 @@
     var n = 0;
     memoEntries.forEach(function(e) {
       if (!e.include) return;
-      var hasKanji = /[一-鿿㐀-䶿]/.test(e.title);
       songs.push({
         id: base.toString(36) + Math.random().toString(36).slice(2, 7) + n,
         title: e.title,
-        yomi: hasKanji ? '' : toHiragana(e.title),
+        yomi: makeYomi(e.title),
         artist: '',
         artistYomi: '',
         score: e.score,
@@ -958,6 +962,18 @@
   if (AD_HTML) {
     document.getElementById('adBox').innerHTML = AD_HTML;
     document.getElementById('adSection').hidden = false;
+  }
+
+  var YOMI_FILL_KEY = 'utalog_yomi_fill_v1';
+  if (!localStorage.getItem(YOMI_FILL_KEY)) {
+    var filled = 0;
+    songs.forEach(function(s) {
+      if (s.yomi) return;
+      var y = makeYomi(s.title);
+      if (y) { s.yomi = y; filled++; }
+    });
+    if (filled > 0) saveSongs();
+    localStorage.setItem(YOMI_FILL_KEY, '1');
   }
 
   renderSongs();
