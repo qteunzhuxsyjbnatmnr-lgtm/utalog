@@ -195,6 +195,45 @@
     font-size: 14px;
     margin: 4px 0 0;
   }
+  textarea {
+    width: 100%;
+    font-size: 16px;
+    font-family: inherit;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #232323;
+    border: 1px solid #333;
+    color: #eee;
+    resize: vertical;
+  }
+  textarea::placeholder { color: #777; }
+  .memo-section {
+    padding: 18px 18px 8px;
+    border-top: 1px solid #2a2a2a;
+  }
+  .memo-section .btn-secondary { width: 100%; }
+  .memo-content { max-height: 92vh; overflow-x: hidden; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #444 #1c1c1c; }
+  .memo-summary { font-size: 14px; color: #ccc; line-height: 1.6; margin: 0 0 10px; }
+  #memoPreview { max-height: 42vh; overflow-x: hidden; overflow-y: auto; margin-bottom: 8px; scrollbar-width: thin; scrollbar-color: #444 #1c1c1c; }
+  .memo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 2px;
+    border-bottom: 1px solid #2a2a2a;
+    cursor: pointer;
+  }
+  .memo-row input { width: 20px; height: 20px; flex-shrink: 0; }
+  .memo-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .memo-title {
+    font-size: 16px;
+    color: #f2f2f2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .memo-note { font-size: 12px; color: #e0b13a; }
+  .memo-score { font-size: 16px; font-weight: bold; color: #21c58c; flex-shrink: 0; }
   .backup-section {
     padding: 18px 18px 30px;
     border-top: 1px solid #2a2a2a;
@@ -318,6 +357,12 @@
     <div id="nextList"></div>
   </section>
 
+  <section class="memo-section">
+    <h2 class="next-title">メモからまとめて登録</h2>
+    <p class="backup-desc">今使っているメモの内容を貼り付けると、曲名と得点を読み取って、まとめて登録できます。登録する前に、読み取った内容を確認できます。</p>
+    <button class="btn-secondary" id="memoOpenBtn">メモを貼り付けて登録</button>
+  </section>
+
   <section class="backup-section">
     <h2 class="next-title">他の端末とデータをやりとり</h2>
     <p class="backup-desc">「書き出す」でファイルを作り、そのファイルを別の端末に送ってから「読み込む」を押すと、そちらのデータをこの端末にコピーできます。読み込むと今のデータは上書きされます。</p>
@@ -338,6 +383,32 @@
   </section>
 
   <p class="privacy-link"><a href="privacy.html">プライバシーポリシー</a></p>
+</div>
+
+<div class="modal" id="memoModal" hidden>
+  <div class="modal-content memo-content">
+    <div class="modal-header-row">
+      <h2>メモから登録</h2>
+    </div>
+    <div id="memoStep1">
+      <p class="memo-summary">メモの内容を貼り付けてください。1行に「曲名　得点」の形で書いてあれば読み取れます。同じ曲の得点が何回分かある場合は、スペースで続けて書いてあってもOKです（1回分ずつ別の記録になります）。</p>
+      <textarea id="memoText" rows="9" placeholder="曲名A　88.123&#10;曲名B　85.064　84.937&#10;曲名C　90.5"></textarea>
+      <p class="error" id="memoError" hidden></p>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="memoCancelBtn">キャンセル</button>
+        <button class="btn-primary" id="memoParseBtn">読み取る</button>
+      </div>
+    </div>
+    <div id="memoStep2" hidden>
+      <p class="memo-summary" id="memoSummary"></p>
+      <div id="memoPreview"></div>
+      <p class="memo-summary" id="memoSkipped" hidden></p>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="memoBackBtn">戻る</button>
+        <button class="btn-primary" id="memoRegisterBtn">登録する</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="modal" id="addModal" hidden>
@@ -716,6 +787,167 @@
       alert('読み込みました');
     };
     reader.readAsText(file);
+  });
+
+  var memoModal = document.getElementById('memoModal');
+  var memoText = document.getElementById('memoText');
+  var memoError = document.getElementById('memoError');
+  var memoStep1 = document.getElementById('memoStep1');
+  var memoStep2 = document.getElementById('memoStep2');
+  var memoRegisterBtn = document.getElementById('memoRegisterBtn');
+  var memoEntries = [];
+
+  function tokenToScore(tok) {
+    if (tok.indexOf('.') !== -1) {
+      return { value: Number(tok), guessed: tok.charAt(tok.length - 1) === '.' };
+    }
+    if (/^\d{4,5}$/.test(tok)) {
+      var dec = tok.length === 5 ? 3 : 2;
+      return { value: Number(tok.slice(0, -dec) + '.' + tok.slice(-dec)), guessed: true };
+    }
+    return null;
+  }
+
+  function parseMemo(text) {
+    var entries = [];
+    var skipped = [];
+    var seen = {};
+    songs.forEach(function(s) {
+      if (s.score != null) seen[normalize(s.title) + '|' + s.score] = 'existing';
+    });
+    text.split(/\r?\n/).forEach(function(raw) {
+      var line = raw.trim();
+      if (!line) return;
+      var scores = [];
+      var title = line.replace(/\d+\.\d*|\d+/g, function(tok) {
+        var sc = tokenToScore(tok);
+        if (!sc) return tok;
+        scores.push(sc);
+        return ' ';
+      }).replace(/\s+/g, ' ').trim();
+      if (!title) { skipped.push(line); return; }
+      if (scores.length === 0) {
+        entries.push({ title: title, score: null, note: '得点なし', include: true });
+        return;
+      }
+      scores.forEach(function(sc) {
+        var note = '';
+        var include = true;
+        if (sc.value > 100) {
+          note = '得点が100を超えています';
+          include = false;
+        } else if (sc.guessed) {
+          note = '数字を推測しました';
+        }
+        var key = normalize(title) + '|' + sc.value;
+        if (seen[key]) {
+          note = seen[key] === 'existing' ? '登録済みと同じ記録です' : 'メモの中で重複しています';
+          include = false;
+        } else {
+          seen[key] = 'memo';
+        }
+        entries.push({ title: title, score: sc.value, note: note, include: include });
+      });
+    });
+    return { entries: entries, skipped: skipped };
+  }
+
+  function updateMemoCount() {
+    var n = memoEntries.filter(function(e) { return e.include; }).length;
+    memoRegisterBtn.textContent = n + '件を登録';
+  }
+
+  function renderMemoPreview() {
+    document.getElementById('memoPreview').innerHTML = memoEntries.map(function(e, i) {
+      return '<label class="memo-row">' +
+        '<input type="checkbox" data-memo="' + i + '"' + (e.include ? ' checked' : '') + '>' +
+        '<span class="memo-main"><span class="memo-title">' + escapeHtml(e.title) + '</span>' +
+        (e.note ? '<span class="memo-note">' + escapeHtml(e.note) + '</span>' : '') + '</span>' +
+        '<span class="memo-score">' + (e.score == null ? '－' : e.score) + '</span>' +
+      '</label>';
+    }).join('');
+    updateMemoCount();
+  }
+
+  document.getElementById('memoOpenBtn').addEventListener('click', function() {
+    memoText.value = '';
+    memoError.hidden = true;
+    memoStep1.hidden = false;
+    memoStep2.hidden = true;
+    memoModal.hidden = false;
+    memoText.focus();
+  });
+
+  document.getElementById('memoCancelBtn').addEventListener('click', function() {
+    memoModal.hidden = true;
+  });
+
+  document.getElementById('memoParseBtn').addEventListener('click', function() {
+    if (!memoText.value.trim()) {
+      memoError.textContent = 'メモの内容を貼り付けてください';
+      memoError.hidden = false;
+      return;
+    }
+    var result = parseMemo(memoText.value);
+    if (result.entries.length === 0) {
+      memoError.textContent = '読み取れる行がありませんでした';
+      memoError.hidden = false;
+      return;
+    }
+    memoError.hidden = true;
+    memoEntries = result.entries;
+    document.getElementById('memoSummary').textContent =
+      memoEntries.length + '件を読み取りました。登録したい行にチェックを入れてください（黄色い文字の行は、確認が必要なのでチェックを外してあります）。';
+    var skippedEl = document.getElementById('memoSkipped');
+    if (result.skipped.length > 0) {
+      skippedEl.textContent = '読み取れなかった行（曲名が分かりません）：' + result.skipped.join(' / ');
+      skippedEl.hidden = false;
+    } else {
+      skippedEl.hidden = true;
+    }
+    renderMemoPreview();
+    memoStep1.hidden = true;
+    memoStep2.hidden = false;
+  });
+
+  document.getElementById('memoPreview').addEventListener('change', function(e) {
+    var idx = e.target.getAttribute('data-memo');
+    if (idx === null) return;
+    memoEntries[Number(idx)].include = e.target.checked;
+    updateMemoCount();
+  });
+
+  document.getElementById('memoBackBtn').addEventListener('click', function() {
+    memoStep2.hidden = true;
+    memoStep1.hidden = false;
+  });
+
+  memoRegisterBtn.addEventListener('click', function() {
+    var base = Date.now();
+    var n = 0;
+    memoEntries.forEach(function(e) {
+      if (!e.include) return;
+      var hasKanji = /[一-鿿㐀-䶿]/.test(e.title);
+      songs.push({
+        id: base.toString(36) + Math.random().toString(36).slice(2, 7) + n,
+        title: e.title,
+        yomi: hasKanji ? '' : toHiragana(e.title),
+        artist: '',
+        artistYomi: '',
+        score: e.score,
+        favorite: false,
+        addedAt: base + n
+      });
+      n++;
+    });
+    if (n === 0) {
+      alert('登録する行にチェックを入れてください');
+      return;
+    }
+    saveSongs();
+    renderSongs();
+    memoModal.hidden = true;
+    alert(n + '件を登録しました');
   });
 
   // 収益化の設定。空のあいだは、画面に何も出ない。
