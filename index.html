@@ -128,6 +128,7 @@
     flex-shrink: 0;
   }
   .song-score.none { color: #555; }
+  .count-line { margin: 10px 4px 2px; font-size: 13px; line-height: 1.6; color: #9a9a9a; }
   .empty-msg {
     color: #777;
     font-size: 15px;
@@ -339,6 +340,7 @@
   </header>
 
   <main>
+    <p class="count-line" id="countLine" hidden></p>
     <div class="song-list" id="songList"></div>
   </main>
 
@@ -513,6 +515,16 @@
     return toHiragana(String(str).toLowerCase());
   }
 
+  function countSongs(arr) {
+    var seen = {};
+    var n = 0;
+    arr.forEach(function(s) {
+      var key = normalize(s.title);
+      if (!seen[key]) { seen[key] = true; n++; }
+    });
+    return n;
+  }
+
   function formatScore(v) {
     return v == null ? '－' : Number(v).toFixed(3);
   }
@@ -548,9 +560,21 @@
       list.sort(function(a, b) { return b.addedAt - a.addedAt; });
     }
 
+    var countEl = document.getElementById('countLine');
+    if (songs.length === 0) {
+      countEl.hidden = true;
+    } else {
+      countEl.hidden = false;
+      countEl.textContent = (searchText || favoritesOnly)
+        ? countSongs(list) + '曲（記録' + list.length + '件）を表示中 ／ 全' + countSongs(songs) + '曲'
+        : '全' + countSongs(songs) + '曲（記録' + songs.length + '件）';
+    }
+
     var container = document.getElementById('songList');
     if (list.length === 0) {
-      container.innerHTML = '<p class="empty-msg">まだ記録がありません。<br>上の「＋ 曲を追加」から記録しましょう。</p>';
+      container.innerHTML = songs.length === 0
+        ? '<p class="empty-msg">まだ記録がありません。<br>上の「＋ 曲を追加」から記録しましょう。</p>'
+        : '<p class="empty-msg">該当する曲がありません</p>';
       return;
     }
 
