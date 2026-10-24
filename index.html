@@ -230,7 +230,8 @@
   .ad-section { margin-top: 72px; }
   .ad-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 11px; color: #777; }
   .ad-pr { border: 1px solid #444; border-radius: 4px; padding: 1px 4px; }
-  #adBox { min-height: 50px; overflow: hidden; }
+  #adBox { min-height: 50px; overflow: hidden; text-align: center; }
+  #adBox img { border-radius: 8px; }
   #adBox img { max-width: 100%; height: auto; }
   .help-link { margin: 0 0 16px; text-align: center; font-size: 13px; }
   .help-link a { color: #9a9a9a; text-decoration: underline; }
@@ -974,9 +975,14 @@
   //   DONATE_URL : 寄付(応援)ページのアドレス。書き出した後に、リンクが出る
   //   AD_HTML    : 広告のコード(画像つきリンクなど)。ページの一番下に、広告の枠が出る
   var DONATE_URL = 'https://ofuse.me/3e4f1327';
-  var AD_HTML = '';
+  var AD_HTML = '<a href="//af.moshimo.com/af/c/click?a_id=5862946&p_id=4677&pc_id=12285&pl_id=62831" rel="nofollow" referrerpolicy="no-referrer-when-downgrade" attributionsrc><img src="//image.moshimo.com/af-img/0834/000000062831.jpg" width="320" height="50" style="border:none;"></a><img src="//i.moshimo.com/af/i/impression?a_id=5862946&p_id=4677&pc_id=12285&pl_id=62831" width="1" height="1" style="border:none;" loading="lazy">';
   if (AD_HTML) {
     document.getElementById('adBox').innerHTML = AD_HTML;
+    // 広告は、別のタブで開く(アプリの画面から、離れてしまわないように)
+    Array.prototype.forEach.call(document.querySelectorAll('#adBox a'), function(a) {
+      a.target = '_blank';
+      a.rel = 'nofollow noopener';
+    });
     document.getElementById('adSection').hidden = false;
   }
 
